@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
         'downloads',
         'followers',
         'comments',
-
     ];
     /**
      * Run the database seeds.

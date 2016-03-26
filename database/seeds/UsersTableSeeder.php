@@ -12,7 +12,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         factory(App\Src\User\User::class, 1)->create(['email'=>'admin@test.com','admin'=>1]);
-        factory(App\Src\User\User::class, 20)->create();
+        factory(App\Src\User\User::class, 2)->create();
 
         $userArray = App\Src\User\User::lists('id')->toArray();
         $users =  App\Src\User\User::all();

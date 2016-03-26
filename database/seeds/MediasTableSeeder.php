@@ -12,10 +12,9 @@ class MediasTableSeeder extends Seeder
     public function run()
     {
         $userArray = App\Src\User\User::lists('id')->toArray();
-        factory(App\Src\Media\Media::class, 50)->create()->each(function($media) use ($userArray) {
-            $media->favorites()->sync([$userArray[array_rand($userArray)]]);
-            $media->downloads()->sync([$userArray[array_rand($userArray)]]);
-
+        factory(App\Src\Media\Media::class, 10)->create()->each(function($media) use ($userArray) {
+//            $media->favorites()->sync([$userArray[array_rand($userArray)]]);
+//            $media->downloads()->sync([$userArray[array_rand($userArray)]]);
         });
     }
 }

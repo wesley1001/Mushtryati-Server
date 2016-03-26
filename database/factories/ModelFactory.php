@@ -14,6 +14,7 @@ $factory->define(\App\Src\User\User::class, function (Faker\Generator $faker) {
         'expire_date' => $faker->dateTime,
         'api_token' => str_random(60),
         'remember_token' => str_random(10),
+        'image' => $faker->imageUrl($width = 680, $height = 680),
         'admin' => 0,
         'active' => 1
     ];
