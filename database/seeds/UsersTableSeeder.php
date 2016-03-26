@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
 
         foreach($users as $user) {
             $user->followers()->sync([$userArray[array_rand($userArray)]]);
-            $user->following()->sync([$userArray[array_rand($userArray)]]);
+            $user->followings()->sync([$userArray[array_rand($userArray)]]);
         }
     }
 }
