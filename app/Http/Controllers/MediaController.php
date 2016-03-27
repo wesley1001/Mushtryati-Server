@@ -86,7 +86,7 @@ class MediaController extends Controller
             if(is_file($request->photo)) {
 
                 $photo =  $request->file('photo');
-                return response()->json(['downloaded media'=>$photo]);
+                return response()->json(['downloaded media type'=>$photo->getClientOriginalExtension()]);
 
                 $uploadPath = '/uploads/medias/';
                 $storagePath =  public_path().$uploadPath;
