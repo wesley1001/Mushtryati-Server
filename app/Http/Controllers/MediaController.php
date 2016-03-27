@@ -79,9 +79,10 @@ class MediaController extends Controller
 
     public function store(Request $request)
     {
-        $user= Auth::guard('api')->user();
+//        $user= Auth::guard('api')->user();
 
-        if($user && $request->photo) {
+//        if($user && $request->photo) {
+        if($request->photo) {
             if(is_file($request->photo)) {
 
                 $photo =  $request->file('photo');
