@@ -81,10 +81,12 @@ class MediaController extends Controller
     {
         $user= Auth::guard('api')->user();
 
-        return response()->json(['downloaded media'=>$request->photo]);
         if($user && $request->photo) {
             if(is_file($request->photo)) {
+
                 $photo =  $request->file('photo');
+                return response()->json(['downloaded media'=>$photo]);
+
                 $uploadPath = '/uploads/medias/';
                 $storagePath =  public_path().$uploadPath;
                 $fileName = rand().'.'.$photo->getClientOriginalExtension();
