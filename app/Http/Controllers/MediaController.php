@@ -26,7 +26,6 @@ class MediaController extends Controller
     /**
      * @var ImageManager
      */
-    private $mediaManager;
 
     /**
      * MediaController constructor.
@@ -84,16 +83,23 @@ class MediaController extends Controller
 
     public function store(Request $request)
     {
+
+
         $user= Auth::guard('api')->user();
+        $user = Auth::loginUsingId(1);
         if(!$user) {
             return response()->json(['message'=>'invalid user','success'=>false]);
         }
-//        $user = Auth::loginUsingId(1);
         if($request->hasFile('media')) {
             $mediaManager = new MediaManager($request->file('media'));
             $uploadedMedia = $mediaManager->storeMedia();
+            $mediaType = $uploadedMedia->getMediaType();
+            $mediaUploadDir = url(env('MEDIAS_UPLOAD_DIR'));
             $media = $user->medias()->create([
-                'url' => $uploadedMedia->getHashedNameWithExtension(),
+                'large_url' => $mediaUploadDir.$uploadedMedia->largeImagePath,
+                'medium_url' => $mediaUploadDir.$uploadedMedia->mediumImagePath,
+                'thumb_url' => $mediaUploadDir.$uploadedMedia->thumbnailImagePath,
+                'video_url'=> $mediaUploadDir.$uploadedMedia->videoPath,
                 'type'=> $uploadedMedia->getMediaType(),
                 'caption' => 'asdasd'
             ]);
@@ -113,6 +119,14 @@ class MediaController extends Controller
     {
         $media = $this->mediaRepository->with('user','comments.user')->find($mediaID);
         return response()->json(['data'=>$media]);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUploadDir()
+    {
+        return $this->uploadDir;
     }
 
 }

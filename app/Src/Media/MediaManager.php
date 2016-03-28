@@ -17,6 +17,13 @@ class MediaManager
     private $hashedName;
     private $mediaExtension;
     private $mediaType;
+    public $uploadDir;
+    public $largeImagePath;
+    public $mediumImagePath;
+    public $thumbnailImagePath;
+    public $videoPath;
+    const IMAGE_EXTENSION = 'jpg';
+    const VIDEO_EXTENSION = 'mov';
 
     /**
      * MediaManager constructor.
@@ -41,19 +48,14 @@ class MediaManager
         $media = $this->file;
         $this->setMediaExtension($media->getClientOriginalExtension());
         $this->hashName();
-        $imageUploader = new ImageUploader();
-        $videoUploader = new VideoUploader();
-
         if(in_array($this->getMediaExtension(),$this->imageExtensions)) {
             $this->setMediaType('image');
-            $imageUploader->upload($media,$this->getHashedName());
+            $this->uploadImage($media);
         } elseif(in_array($this->getMediaExtension(),$this->videoExtensions)) {
             $this->setMediaType('video');
-            $uploadedVideo = $videoUploader->upload($media,$this->getHashedName());
-            $frameImage = new File($uploadedVideo->getFrameFileName());
-            $imageUploader->upload($frameImage,$this->getHashedName());
-            unlink($uploadedVideo->getFrameFileName());
+            $this->uploadVideo($media);
         }
+//        dd($this);
         return $this;
     }
 
@@ -114,6 +116,45 @@ class MediaManager
     public function getHashedNameWithExtension()
     {
         $extension = $this->getMediaExtension();
+
+        if($this->getMediaType() == 'video') {
+            $extension = 'mov';
+        }
+
         return $this->getHashedName().'.'.$extension;
+    }
+
+    /**
+     * @param $media
+     */
+    public function uploadImage($media)
+    {
+        $imageUploader = new ImageUploader();
+        if (is_null($this->getMediaExtension()) || !in_array($this->getMediaExtension(), $this->imageExtensions)) {
+            $this->setMediaExtension(self::IMAGE_EXTENSION);
+        }
+        $hashedNamed = $this->getHashedName() .'.'. $this->getMediaExtension();
+        $imageUploader->upload($media, $hashedNamed);
+        $this->largeImagePath     = env('LARGE_IMAGE_PATH').$hashedNamed;
+        $this->mediumImagePath    = env('MEDIUM_IMAGE_PATH').$hashedNamed;
+        $this->thumbnailImagePath = env('THUMB_IMAGE_PATH').$hashedNamed;
+        return $this;
+    }
+
+    /**
+     * @param $media
+     */
+    public function uploadVideo($media)
+    {
+        $videoUploader = new VideoUploader();
+        if (is_null($this->getMediaExtension()) || !in_array($this->getMediaExtension(), $this->videoExtensions)) {
+            $this->setMediaExtension(self::VIDEO_EXTENSION);
+        }
+        $hashedNamed = $this->getHashedName() .'.'. $this->getMediaExtension();
+        $uploadedVideo = $videoUploader->upload($media, $hashedNamed);
+        $frameImage = new File($uploadedVideo->getFrameFileName());
+        $this->uploadImage($frameImage);
+        unlink($uploadedVideo->getFrameFileName());
+        $this->videoPath = env('THUMB_IMAGE_PATH').$hashedNamed;
     }
 }

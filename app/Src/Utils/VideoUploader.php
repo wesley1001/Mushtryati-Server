@@ -28,7 +28,6 @@ class VideoUploader implements MediaUploaderInterface
      */
     public function upload(File $file,$hashedName)
     {
-        $hashedName = $hashedName.self::VIDEO_EXTENSION;
         $ffmpeg = FFMpeg::create([
             'ffmpeg.binaries'  => self::FFMPEG_BINARY,
             'ffprobe.binaries' => self::FFPROBE_BINARY

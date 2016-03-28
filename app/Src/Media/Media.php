@@ -12,6 +12,8 @@ class Media extends Model
 
     protected $guarded = ['id'];
 
+//    protected $hidden = ['thumb_url'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

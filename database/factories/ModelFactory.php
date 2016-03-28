@@ -24,8 +24,11 @@ $factory->define(App\Src\Media\Media::class, function ($faker) {
     return [
         'user_id' => App\Src\User\User::orderByRaw("RAND()")->first()->id,
         'caption' => $faker->sentence(1),
-        'large' => $faker->imageUrl($width = 1200, $height = 1200),
-        'type' => 'image',
+        'large_url' => $faker->imageUrl($width = 1440, $height = 2560),
+        'medium_url' => $faker->imageUrl($width = 250, $height = 450),
+        'video_url' => '',
+        'thumb_url' => $faker->imageUrl($width = 450, $height = 800),
+        'type' => 'image'
     ];
 });
 

@@ -1,10 +1,8 @@
 <?php
 namespace App\Src\Utils;
 
-use Exception;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class BaseImageService
 {
@@ -17,31 +15,32 @@ abstract class BaseImageService
 
     private $mediumImagePath;
 
-    protected $largeImageWidth = '750';
+    protected $largeImageWidth = 'null';
 
-    protected $largeImageHeight = '700';
+    protected $largeImageHeight = '1800';
 
     protected $mediumImageWidth = 'null';
 
-    protected $mediumImageHeight = '500';
+    protected $mediumImageHeight = '800';
 
     protected $thumbnailImageWidth = '250';
 
     protected $thumbnailImageHeight = 'null';
 
-    const IMAGE_EXTENSION = '.jpg';
+//    const IMAGE_EXTENSION = '.jpg';
 
     public function __construct()
     {
-        $this->uploadDir          = public_path() . '/uploads/medias/images/';
-        $this->largeImagePath     = $this->getUploadDir() . 'large/';
-        $this->mediumImagePath    = $this->getUploadDir() . 'medium/';
-        $this->thumbnailImagePath = $this->getUploadDir() . 'thumb/';
+        $this->uploadDir          = public_path().'/uploads/medias';
+        $this->largeImagePath     = $this->getUploadDir().env('LARGE_IMAGE_PATH');
+        $this->mediumImagePath    = $this->getUploadDir().env('MEDIUM_IMAGE_PATH');
+        $this->thumbnailImagePath = $this->getUploadDir().env('THUMB_IMAGE_PATH');
     }
 
     protected function process(File $image, $hashedName, array $imageDimensions = ['large'])
     {
-        $hashedName = $hashedName.self::IMAGE_EXTENSION;
+//        $hashedName = $hashedName.self::IMAGE_EXTENSION;
+        $hashedName = $hashedName;
 
         foreach ($imageDimensions as $imageDimension) {
             switch ($imageDimension) {
