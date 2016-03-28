@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Src\Comment\Comment;
+use App\Src\Media\MediaManager;
 use App\Src\Media\Media;
 use App\Src\User\User;
 use Illuminate\Http\Request;
@@ -22,6 +23,10 @@ class MediaController extends Controller
      * @var User
      */
     private $userRepository;
+    /**
+     * @var ImageManager
+     */
+    private $mediaManager;
 
     /**
      * MediaController constructor.
@@ -80,17 +85,13 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $user= Auth::guard('api')->user();
-//        $user = $this->userRepository->first();
+//        $user = Auth::loginUsingId(1);
         if($request->hasFile('media')) {
-            $photo =  $request->file('media');
-            $uploadPath = '/uploads/medias/';
-            $storagePath =  public_path().$uploadPath;
-            $fileName = rand().'.'.$photo->getClientOriginalExtension();
-            $photo->move($storagePath,$fileName);
-            $mediaUrl = url($uploadPath.$fileName);
+            $mediaManager = new MediaManager($request->file('media'));
+            $uploadedMedia = $mediaManager->storeMedia();
             $media = $user->medias()->create([
-                'url' => $mediaUrl,
-                'type'=>'image',
+                'url' => $uploadedMedia->getHashedNameWithExtension(),
+                'type'=> $uploadedMedia->getMediaType(),
                 'caption' => 'asdasd'
             ]);
             $media->load('user');
@@ -98,7 +99,6 @@ class MediaController extends Controller
         }
         return response()->json(['message'=>'is not a file','success'=>false]);
     }
-
 
     public function getMediaComments($mediaID)
     {
