@@ -79,32 +79,24 @@ class MediaController extends Controller
 
     public function store(Request $request)
     {
-//        $user= Auth::guard('api')->user();
-
-        $user = $this->userRepository->first();
-//        if($user && $request->photo) {
-        if($request->photo) {
-            if(is_file($request->photo)) {
-
-                $photo =  $request->file('photo');
-//                return response()->json(['downloaded media type'=>$photo->getClientOriginalExtension()]);
-
-                $uploadPath = '/uploads/medias/';
-                $storagePath =  public_path().$uploadPath;
-                $fileName = rand().'.'.$photo->getClientOriginalExtension();
-                $photo->move($storagePath,$fileName);
-                $mediaUrl = url($uploadPath.$fileName);
-                $media = $user->medias()->create([
-                    'url' => $mediaUrl,
-                    'type'=>'image',
-                    'caption' => 'asdasd'
-                ]);
-                $media->load('user');
-                return response()->json(['data'=>$media,'success'=>true]);
-            }
-            return response()->json(['message'=>'is not a file','success'=>false]);
+        $user= Auth::guard('api')->user();
+//        $user = $this->userRepository->first();
+        if($request->hasFile('media')) {
+            $photo =  $request->file('media');
+            $uploadPath = '/uploads/medias/';
+            $storagePath =  public_path().$uploadPath;
+            $fileName = rand().'.'.$photo->getClientOriginalExtension();
+            $photo->move($storagePath,$fileName);
+            $mediaUrl = url($uploadPath.$fileName);
+            $media = $user->medias()->create([
+                'url' => $mediaUrl,
+                'type'=>'image',
+                'caption' => 'asdasd'
+            ]);
+            $media->load('user');
+            return response()->json(['data'=>$media,'success'=>true]);
         }
-        return response()->json(['message'=>'unknown error','success'=>false]);
+        return response()->json(['message'=>'is not a file','success'=>false]);
     }
 
 

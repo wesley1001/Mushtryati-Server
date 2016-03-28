@@ -56,13 +56,14 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         if (Auth::attempt(([
-            'email' => strtolower($request->json('email')),
-            'password' => $request->json('password'),
+            'email' => strtolower($request->get('email')),
+            'password' => $request->get('password'),
             'active' => 1
         ]),
             true)
         ) {
             $user = Auth::user();
+            $user->makeVisible('api_token');
             return response()->json(['success' => true,'data'=>$user],200);
         }
 

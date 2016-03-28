@@ -4,6 +4,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('test',function() {
+    $ffmpeg = FFMpeg\FFMpeg::create([
+        'ffmpeg.binaries'  => '/bin/ffmpeg',
+        'ffprobe.binaries' => '/bin/ffprobe'
+    ]);
+
+    $uploadPath =  public_path().'/uploads/medias/';
+    $demoMovie =$uploadPath.'demo.mov';
+    $video = $ffmpeg->open($demoMovie);
+//    $video
+//        ->filters()
+//        ->resize(new FFMpeg\Coordinate\Dimension(320, 240))
+//        ->synchronize();
+    $video
+        ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(1))
+        ->save($uploadPath.'frame.jpg');
+//    $video
+//        ->save(new FFMpeg\Format\Video\X264(), 'export-x264.mp4')
+//        ->save(new FFMpeg\Format\Video\WMV(), 'export-wmv.wmv')
+//        ->save(new FFMpeg\Format\Video\WebM(), 'export-webm.webm');
+});
 /*
 |--------------------------------------------------------------------------
 | Application Routes

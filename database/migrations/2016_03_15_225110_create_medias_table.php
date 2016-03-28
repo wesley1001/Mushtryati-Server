@@ -18,6 +18,7 @@ class CreateMediasTable extends Migration
             $table->text('caption');
             $table->enum('type',['image','video']);
             $table->text('url');
+            $table->text('video_url')->nullable();
             $table->timestamps();
         });
     }

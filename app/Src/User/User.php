@@ -10,8 +10,7 @@ class User extends Authenticatable
 {
     protected $table = 'users';
     protected $guarded = ['id'];
-    protected $hidden = ['password', 'remember_token','pivot'];
-
+    protected $hidden = ['password', 'remember_token','pivot','api_token'];
 
     /* Model Relations */
 
