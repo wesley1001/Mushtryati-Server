@@ -7,8 +7,8 @@ Route::get('/', function () {
 
 Route::get('test',function() {
     $ffmpeg = FFMpeg\FFMpeg::create([
-        'ffmpeg.binaries'  => '/bin/ffmpeg',
-        'ffprobe.binaries' => '/bin/ffprobe'
+        'ffmpeg.binaries'  => '~/home/vagrant/bin/ffmpeg',
+        'ffprobe.binaries' => '~/home/vagrant/bin/ffprobe'
     ]);
 
     $uploadPath =  public_path().'/uploads/medias/';
