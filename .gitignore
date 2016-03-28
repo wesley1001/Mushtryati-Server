@@ -28,3 +28,5 @@ public/uploads/large/*
 public/tracks/*
 templates/
 public/medias/*
+/bootstrap/compiled.php
+
