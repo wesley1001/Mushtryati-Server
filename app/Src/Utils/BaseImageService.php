@@ -29,6 +29,8 @@ abstract class BaseImageService
 
     protected $thumbnailImageHeight = 'null';
 
+    const IMAGE_EXTENSION = '.jpg';
+
     public function __construct()
     {
         $this->uploadDir          = public_path() . '/uploads/medias/images/';
@@ -39,7 +41,8 @@ abstract class BaseImageService
 
     protected function process(File $image, $hashedName, array $imageDimensions = ['large'])
     {
-        $hashedName = $hashedName.'.'.$image->getExtension();
+        $hashedName = $hashedName.self::IMAGE_EXTENSION;
+
         foreach ($imageDimensions as $imageDimension) {
             switch ($imageDimension) {
                 case 'large':
