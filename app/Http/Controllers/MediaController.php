@@ -85,6 +85,9 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $user= Auth::guard('api')->user();
+        if(!$user) {
+            return response()->json(['message'=>'invalid user','success'=>false]);
+        }
 //        $user = Auth::loginUsingId(1);
         if($request->hasFile('media')) {
             $mediaManager = new MediaManager($request->file('media'));
