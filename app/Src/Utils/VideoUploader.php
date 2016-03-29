@@ -9,8 +9,10 @@ use Symfony\Component\HttpFoundation\File\File;
 class VideoUploader implements MediaUploaderInterface
 {
 
-    const FFMPEG_BINARY = '/home/vagrant/bin/ffmpeg';
-    const FFPROBE_BINARY = '/home/vagrant/bin/ffprobe';
+    const FFMPEG_BINARY_LOCAL = '/home/vagrant/bin/ffmpeg';
+    const FFPROBE_BINARY_LOCAL = '/home/vagrant/bin/ffprobe';
+    const FFMPEG_BINARY = '/root/bin/ffmpeg';
+    const FFPROBE_BINARY = '/root/bin/ffprobe';
     const IMAGE_EXTENSION = '.jpg';
     const VIDEO_EXTENSION = '.mov';
 

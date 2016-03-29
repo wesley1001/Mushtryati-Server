@@ -84,7 +84,7 @@ class MediaController extends Controller
     public function store(Request $request)
     {
 //        $user= Auth::guard('api')->user();
-        $user = Auth::loginUsingId(1);  
+        $user = Auth::loginUsingId(1);
         if(!$user) {
             return response()->json(['message'=>'invalid user','success'=>false]);
         }
