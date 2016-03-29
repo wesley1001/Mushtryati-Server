@@ -83,10 +83,8 @@ class MediaController extends Controller
 
     public function store(Request $request)
     {
-
-
-        $user= Auth::guard('api')->user();
-        $user = Auth::loginUsingId(1);
+//        $user= Auth::guard('api')->user();
+        $user = Auth::loginUsingId(1);  
         if(!$user) {
             return response()->json(['message'=>'invalid user','success'=>false]);
         }
@@ -100,7 +98,7 @@ class MediaController extends Controller
                 'medium_url' => $mediaUploadDir.$uploadedMedia->mediumImagePath,
                 'thumb_url' => $mediaUploadDir.$uploadedMedia->thumbnailImagePath,
                 'video_url'=> $mediaUploadDir.$uploadedMedia->videoPath,
-                'type'=> $uploadedMedia->getMediaType(),
+                'type'=> $mediaType,
                 'caption' => 'asdasd'
             ]);
             $media->load('user');
