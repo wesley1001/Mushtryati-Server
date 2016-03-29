@@ -83,13 +83,20 @@ class MediaController extends Controller
 
     public function store(Request $request)
     {
-//        $user= Auth::guard('api')->user();
-        $user = Auth::loginUsingId(1);
+        $user= Auth::guard('api')->user();
+//        $user = Auth::loginUsingId(1);
         if(!$user) {
             return response()->json(['message'=>'invalid user','success'=>false]);
         }
+
         if($request->hasFile('media')) {
-            $mediaManager = new MediaManager($request->file('media'));
+
+            $mediaFile = $request->file('media');
+            if($mediaFile->getClientOriginalExtension() != 'jpg') {
+                return response()->json(['message'=>'currently video rec is not permitted','success'=>false]);
+            }
+
+            $mediaManager = new MediaManager($mediaFile);
             $uploadedMedia = $mediaManager->storeMedia();
             $mediaType = $uploadedMedia->getMediaType();
             $mediaUploadDir = url(env('MEDIAS_UPLOAD_DIR'));
@@ -99,7 +106,7 @@ class MediaController extends Controller
                 'thumb_url' => $mediaUploadDir.$uploadedMedia->thumbnailImagePath,
                 'video_url'=> $mediaUploadDir.$uploadedMedia->videoPath,
                 'type'=> $mediaType,
-                'caption' => 'asdasd'
+                'caption' => $request->caption //@todo:implement on client side
             ]);
             $media->load('user');
             return response()->json(['data'=>$media,'success'=>true]);
